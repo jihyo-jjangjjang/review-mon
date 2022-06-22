@@ -1,0 +1,41 @@
+version: "3.3"
+
+services:
+  web:
+    links:
+      - database
+    depends_on:
+      - database
+    container_name: "web"
+    build:
+      context: ./web
+    restart: always
+    ports:
+      - "80:3000"
+
+  server:
+    links:
+      - database
+    depends_on:
+      - database
+    container_name: "server"
+    build:
+      context: ./server
+    restart: always
+    ports:
+      - "8080:8000"
+    environment:
+      - PYTHON_ENV=docker
+
+  database:
+    container_name: "database"
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: test
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - "3306:3306"
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
