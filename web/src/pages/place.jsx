@@ -45,7 +45,7 @@ const PlacePage = () => {
     }
     setIsLoading(false);
     await updateReviews();
-  }, []);
+  }, [userRating, userID, reviewContent, place]);
 
   useEffect(() => {
     (async () => {
