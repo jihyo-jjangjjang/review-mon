@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from datetime import datetime
 
 
 class ReviewBase(BaseModel):
@@ -15,6 +16,7 @@ class ReviewCreate(ReviewBase):
 class Review(ReviewBase):
     id: int
     credibility: float
+    created_at: datetime
 
     class Config:
         orm_mode = True

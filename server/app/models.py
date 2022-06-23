@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float
+from sqlalchemy import Column, Integer, String, Float, DateTime
 
 from .database import Base
 
@@ -11,3 +11,4 @@ class Review(Base):
     comment = Column(String(1000))
     rating = Column(Float)
     credibility = Column(Float)
+    created_at = Column(DateTime)
