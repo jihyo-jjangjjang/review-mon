@@ -39,7 +39,7 @@ def get_credibility_by_review(comment, rating):
     total_p['POS'] = total_p['리뷰 내용'].apply(lambda x: twitter.pos(x))
 
     total_p['degree'] = total_p['별점'].apply(lambda x: degree_cal(x))
-    total_p['긍부정 예측_구분'] = predict_pn(comment)
+    total_p['긍부정 예측_구분'] = predict_pn([comment])[0]
 
     total_p['별점_긍부정 구분'] = total_p['별점'].apply(lambda x: 1 if x > 3 else 0)
     total_p['긍부정 예측_성공'] = total_p['긍부정 예측_구분'] - total_p['별점_긍부정 구분']
@@ -99,5 +99,61 @@ def get_credibility_by_review(comment, rating):
     return 80 + reviewer.iloc[0, :]['degree점수'] + reviewer.iloc[0, :]['군집신뢰점수'] - reviewer.iloc[0, :]['N 비율_평균'] * 5 / 100 + reviewer.iloc[0, :]['V 비율_평균'] * 5 / 100
 
     # reviewer['조정 별점'] = reviewer['별점_평균'] * reviewer['신뢰도'] / 100
+
+
+def get_tag_by_user_reviews(reviews):
+    twitter = Twitter()
+
+    total_p = pd.DataFrame({'사용자 ID': [0 for _ in range(len(reviews))], '리뷰 내용': [review.comment for review in reviews], '별점': [review.rating for review in reviews]})
+
+    total_p['리뷰 길이'] = total_p['리뷰 내용'].apply(lambda x: len(x))
+    total_p['POS'] = total_p['리뷰 내용'].apply(lambda x: twitter.pos(x))
+
+    total_p['degree'] = total_p['별점'].apply(lambda x: degree_cal(x))
+    total_p['긍부정 예측_구분'] = predict_pn([review.comment for review in reviews])
+
+    total_p['별점_긍부정 구분'] = total_p['별점'].apply(lambda x: 1 if x > 3 else 0)
+    total_p['긍부정 예측_성공'] = total_p['긍부정 예측_구분'] - total_p['별점_긍부정 구분']
+    total_p['긍부정 예측_성공'] = total_p['긍부정 예측_성공'].apply(lambda x: 1 if x == 0 else 0)
+
+
+    total_p['N 비율'] = total_p['POS'].apply(lambda x: float(NV_count(x)[0]))
+    total_p['V 비율'] = total_p['POS'].apply(lambda x: float(NV_count(x)[1]))
+    non = total_p.loc[total_p['N 비율'] == -1].index
+    total_p = total_p.drop(non)
+
+    # groupby
+    reviewer = total_p.groupby('사용자 ID').aggregate(
+        {'별점': ['mean', 'std'], '사용자 ID': 'count', '리뷰 길이': ['mean', 'std'], 'degree': 'mean', '별점_긍부정 구분': 'sum',
+         '긍부정 예측_성공': 'sum', 'N 비율': ['mean', 'std'], 'V 비율': ['mean', 'std']})
+    reviewer = reviewer.fillna(0)
+
+    reviewer.columns = ['별점_평균', '별점_표준편차', '리뷰 개수', '리뷰 길이_평균', '리뷰 길이_표준편차',
+                        'degree_평균', '긍정 리뷰 개수', '긍부정 예측 일치 비율',
+                        'N 비율_평균', 'N 비율_표준편차', 'V 비율_평균', 'V 비율_표준편차']
+    reviewer['긍부정 예측 일치 비율'] = reviewer['긍부정 예측 일치 비율'] / reviewer['리뷰 개수'] * 100
+
+    reviewer.columns = ['별점_평균', '별점_표준편차', '리뷰 개수', '리뷰 길이_평균', '리뷰 길이_표준편차',
+                        'degree_평균', '긍정 리뷰 개수', '긍부정 예측 일치 비율',
+                        'N 비율_평균', 'N 비율_표준편차', 'V 비율_평균', 'V 비율_표준편차']
+    reviewer['긍부정 예측 일치 비율'] = reviewer['긍부정 예측 일치 비율'] / reviewer['리뷰 개수'] * 100
+    reviewer = reviewer.reset_index()
+    reviewer = reviewer.drop(['사용자 ID'], axis=1)
+
+    loaded_model = joblib.load('app/files/k_means.pkl')
+    cluster = loaded_model.predict(reviewer)[0]
+
+    if cluster == 0:
+        return '응애'
+    elif cluster == 1:
+        return '언어의 마술사'
+    elif cluster == 2:
+        return '긴 말은 안한다'
+    elif cluster == 3:
+        return '모든 램지'
+    elif cluster == 4:
+        return '박찬호'
+    else:
+        return '아낌없이 주는 사람'
 
 

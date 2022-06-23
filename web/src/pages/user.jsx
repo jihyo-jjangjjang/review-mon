@@ -9,12 +9,19 @@ import {getRingByCredibility} from "../utils";
 const UserPage = () => {
     const {user} = useParams()
     const [reviewList, setReviewList] = useState([])
+    const [isTagLoading, setIsTagLoading] = useState(false)
 
     useEffect(() => {
         (async () => {
-            const response = await fetch(`${API_URL}/review/user/${user}`)
+            // load reviews
+            let response = await fetch(`${API_URL}/review/user/${user}`)
             const reviews = await response.json()
             setReviewList(reviews)
+            // load tag
+            setIsTagLoading(true)
+            response = await fetch(`${API_URL}/tag/user/${user}`)
+            const tag = await response.json()
+            console.log(tag)
         })()
     }, [])
 

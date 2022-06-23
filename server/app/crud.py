@@ -4,7 +4,7 @@ from datetime import datetime
 from . import models, schemas
 
 from .sentiment import predict_rating
-from .credibility import get_credibility_by_review
+from .credibility import get_credibility_by_review, get_tag_by_user_reviews
 
 
 def get_places_by_word(db: Session, word: str):
@@ -17,6 +17,14 @@ def get_reviews_by_place(db: Session, place: str):
 
 def get_reviews_by_user(db: Session, user: str):
     return db.query(models.Review).filter(models.Review.user == user).order_by(models.Review.created_at.desc()).all()
+    
+    
+def get_tag_by_user(db: Session, user: str):
+    reviews = db.query(models.Review).filter(models.Review.user == user).order_by(models.Review.created_at.desc()).all()
+    if len(reviews) > 0:
+        return get_tag_by_user_reviews(reviews)
+    else:
+        return '아직 리뷰가 더 필요해요'
 
 
 def create_review(db: Session, review: schemas.ReviewCreate):

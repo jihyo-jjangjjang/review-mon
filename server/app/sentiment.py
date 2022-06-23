@@ -80,7 +80,7 @@ def predict_rating(review=''):
       return max_indices.item() + 1
 
 
-def predict_pn(review=''):
+def predict_pn(reviews=[]):
     # prepare fine-tuned koBERT model
     bert_model, vocab = get_pytorch_kobert_model(cachedir='.cache')
     model = BERTClassifier(bert_model, dr_rate=0.5, num_classes=2)
@@ -89,15 +89,17 @@ def predict_pn(review=''):
     tokenizer = get_tokenizer()
     tok = nlp.data.BERTSPTokenizer(tokenizer, vocab, lower=False)
     # prepare input data
-    reviews = [[review, 0]]
-    test_df = pd.DataFrame(reviews, columns=[['리뷰 내용', '별점']])
+    review_list = [[review, 0] for review in reviews]
+    test_df = pd.DataFrame(review_list, columns=[['리뷰 내용', '별점']])
     test_set = BERTDataset(test_df, 0, 1, tok, 64, True, False)
     test_input = torch.utils.data.DataLoader(test_set, batch_size=1, num_workers=1)
     # feed model
+    result = []
     for batch_id, (token_ids, valid_length, segment_ids, label) in enumerate(test_input):
       token_ids = token_ids.long()
       segment_ids = segment_ids.long()
       valid_length = valid_length
       out = model(token_ids, valid_length, segment_ids)
       max_vals, max_indices = torch.max(out, 1)
-      return max_indices.item()
+      result.append(max_indices.item())
+    return result

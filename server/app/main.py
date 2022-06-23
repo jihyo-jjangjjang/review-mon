@@ -49,3 +49,8 @@ def get_reviews_by_place(place: str, db: Session = Depends(get_db)):
 @app.get("/review/user/{user}", response_model=List[schemas.Review])
 def get_reviews_by_user(user: str, db: Session = Depends(get_db)):
     return crud.get_reviews_by_user(db=db, user=user)
+
+
+@app.get('/tag/user/{user}', response_model=str)
+def get_tag_by_user(user: str, db: Session = Depends(get_db)):
+    return crud.get_tag_by_user(db=db, user=user)
