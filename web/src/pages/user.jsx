@@ -16,6 +16,7 @@ const UserPage = () => {
             // load reviews
             let response = await fetch(`${API_URL}/review/user/${user}`)
             const reviews = await response.json()
+            console.log(reviews)
             setReviewList(reviews)
             // load tag
             response = await fetch(`${API_URL}/tag/user/${user}`)
