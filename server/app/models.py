@@ -1,4 +1,4 @@
-from sqlalchemy import  Column, Integer, String
+from sqlalchemy import Column, Integer, String, Float
 
 from .database import Base
 
@@ -9,5 +9,5 @@ class Review(Base):
     user = Column(String(100))
     place = Column(String(100))
     comment = Column(String(1000))
-    rating = Column(Integer)
-    credibility = Column(Integer)
+    rating = Column(Float)
+    credibility = Column(Float)

@@ -5,7 +5,7 @@ class ReviewBase(BaseModel):
     user: str
     place: str
     comment: str
-    rating: int
+    rating: float
 
 
 class ReviewCreate(ReviewBase):
@@ -14,7 +14,7 @@ class ReviewCreate(ReviewBase):
 
 class Review(ReviewBase):
     id: int
-    credibility: int
+    credibility: float
 
     class Config:
         orm_mode = True
