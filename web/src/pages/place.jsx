@@ -10,7 +10,7 @@ const PlacePage = () => {
         {UserID()}
         {ReviewButton()}
     </div>
-}
+};
 
 const Rate = () => {
 

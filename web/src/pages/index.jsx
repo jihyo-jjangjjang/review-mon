@@ -1,5 +1,13 @@
-const IndexPage = () => {
-    return <div>Index Page</div>
-}
+import Header from "../components/Header";
+import Search from "../components/search";
 
-export default IndexPage
+const IndexPage = () => {
+  return (
+    <div className="w-full">
+      <Header back={false} />
+      <Search />
+    </div>
+  );
+};
+
+export default IndexPage;
