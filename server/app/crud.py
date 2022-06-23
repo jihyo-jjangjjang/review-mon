@@ -18,13 +18,13 @@ def get_reviews_by_user(db: Session, user: str):
 
 
 def create_review(db: Session, review: schemas.ReviewCreate):
-    # TODO recalculate reliability
-    reliability = abs(predict_rating(review.comment) - review.rating)
+    # TODO recalculate credibility
+    credibility = abs(predict_rating(review.comment) - review.rating)
     db_review = models.Review(user=review.user,
                               place=review.place,
                               comment=review.comment,
                               rating=review.rating,
-                              reliability=reliability)
+                              credibility=credibility)
     db.add(db_review)
     db.commit()
     db.refresh(db_review)

@@ -10,4 +10,4 @@ class Review(Base):
     place = Column(String(100))
     comment = Column(String(1000))
     rating = Column(Integer)
-    reliability = Column(Integer)
+    credibility = Column(Integer)

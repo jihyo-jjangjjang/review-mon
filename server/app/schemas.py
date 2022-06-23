@@ -14,7 +14,7 @@ class ReviewCreate(ReviewBase):
 
 class Review(ReviewBase):
     id: int
-    reliability: int
+    credibility: int
 
     class Config:
         orm_mode = True
