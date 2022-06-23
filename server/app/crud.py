@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from datetime import datetime
+import pytz
 
 from . import models, schemas
 
@@ -46,7 +47,7 @@ def get_tag_by_user(db: Session, user: str):
 
 def create_review(db: Session, review: schemas.ReviewCreate):
     cluster, credibility = get_cluster_and_credibility_by_review(db, review)
-    created_at = datetime.now()
+    created_at = datetime.now(tz=pytz.timezone('Asia/Seoul'))
     db_review = models.Review(user=review.user,
                               place=review.place,
                               comment=review.comment,
