@@ -1,9 +1,7 @@
-import logo from "./logo.svg";
 import { Routes, Route } from "react-router-dom";
 import IndexPage from "./pages";
 import PlacePage from "./pages/place";
 import UserPage from "./pages/user";
-import Search from "./components/search";
 
 function App() {
   return (

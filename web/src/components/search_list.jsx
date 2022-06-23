@@ -6,15 +6,9 @@ const List = (props) => {
   var i = 0;
   while (i < searchList.length) {
     list.push(
-      <div className="border-b-2 p-4 text-gray-400 hover:text-gray-900" key={i}>
-        <Link
-          to={"place/" + searchList[i]}
-          key={i}
-          className="text-zinc-600 text-lg"
-        >
+      <Link key={i} to={"place/" + searchList[i]} className="block border-b-2 p-4 font-medium text-lg text-gray-400 hover:text-gray-900">
           {searchList[i]}
-        </Link>
-      </div>
+      </Link>
     );
     i++;
   }

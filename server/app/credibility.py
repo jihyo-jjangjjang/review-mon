@@ -34,6 +34,7 @@ def get_credibility_by_review(comment, rating):
     twitter = Twitter()
 
     total_p = pd.DataFrame({'사용자 ID': [0], '리뷰 내용': [comment], '별점': [rating]})
+    print(total_p)
 
     total_p['리뷰 길이'] = total_p['리뷰 내용'].apply(lambda x: len(x))
     total_p['POS'] = total_p['리뷰 내용'].apply(lambda x: twitter.pos(x))
@@ -68,6 +69,8 @@ def get_credibility_by_review(comment, rating):
     reviewer['긍부정 예측 일치 비율'] = reviewer['긍부정 예측 일치 비율'] / reviewer['리뷰 개수'] * 100
     reviewer = reviewer.reset_index()
     reviewer = reviewer.drop(['사용자 ID'], axis=1)
+
+    print(reviewer)
 
     loaded_model = joblib.load('app/files/k_means.pkl')
     pred_new = loaded_model.predict(reviewer)
