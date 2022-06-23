@@ -5,11 +5,12 @@ import { API_URL } from "../constants";
 import { UserCircleIcon } from "@heroicons/react/solid";
 import Rating from "../components/Rating";
 import { getRingByCredibility } from "../utils";
+import ReactLoading from "react-loading";
 
 const UserPage = () => {
   const { user } = useParams();
   const [reviewList, setReviewList] = useState([]);
-  const [tag, setTag] = useState("...");
+  const [tag, setTag] = useState();
 
   useEffect(() => {
     (async () => {
@@ -20,7 +21,7 @@ const UserPage = () => {
       // load tag
       response = await fetch(`${API_URL}/tag/user/${user}`);
       const tag = await response.json();
-      setTag(tag)
+      setTag(tag);
     })();
   }, []);
 
@@ -28,7 +29,17 @@ const UserPage = () => {
     <div>
       <Header back={true} />
       <h1 className="font-bold text-2xl text-gray-900">{user}님의 리뷰</h1>
-      <span>#{tag}</span>
+      <div className="h-12">
+        {!tag && (
+          <div className="w-full h-full flex flex-col items-center justify-center">
+            <ReactLoading type="bubbles" color="#3730a3" />
+            <span className="font-medium text-gray-600">태그 분석 중</span>
+          </div>
+        )}
+        {tag && (
+          <span className="font-semibold text-2xl text-indigo-800">#{tag}</span>
+        )}
+      </div>
       <div className="mt-4 text-xl font-semibold">
         <span className="">전체</span>
         <span className="ml-2 text-indigo-800">{reviewList.length}</span>
