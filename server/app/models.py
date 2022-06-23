@@ -12,3 +12,4 @@ class Review(Base):
     rating = Column(Float)
     credibility = Column(Float)
     created_at = Column(DateTime)
+    cluster = Column(Integer)

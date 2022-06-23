@@ -17,6 +17,7 @@ class Review(ReviewBase):
     id: int
     credibility: float
     created_at: datetime
+    cluster: int
 
     class Config:
         orm_mode = True

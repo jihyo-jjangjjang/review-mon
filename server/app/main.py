@@ -2,6 +2,7 @@ from typing import List
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
+import locale
 
 from . import crud, models, schemas
 from .database import SessionLocal, engine
@@ -9,6 +10,8 @@ from .database import SessionLocal, engine
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+locale.setlocale(locale.LC_TIME, 'ko_KR.UTF-8')
 
 origins = [
     "http://localhost",

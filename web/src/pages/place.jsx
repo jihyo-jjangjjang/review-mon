@@ -61,7 +61,9 @@ const PlacePage = () => {
         {isLoading && (
           <div className="w-full h-full flex flex-col items-center justify-center">
             <ReactLoading type="bubbles" color="#3730a3" />
-            <span className="font-medium text-gray-600">리뷰 등록 중</span>
+            <span className="font-medium text-gray-600">
+              리뷰 신뢰성 계산 중
+            </span>
           </div>
         )}
         {!isLoading && (

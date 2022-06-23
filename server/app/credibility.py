@@ -2,6 +2,7 @@ import pandas as pd
 from konlpy.tag import *
 import joblib
 
+from . import models
 from .sentiment import predict_pn
 
 
@@ -30,11 +31,23 @@ def NV_count(each_result):
     return round(Nnum / total * 100, 2), round(Vnum / total * 100, 2)
 
 
-def get_credibility_by_review(comment, rating):
+def get_cluster_and_credibility_by_review(db, review):
     twitter = Twitter()
 
-    total_p = pd.DataFrame({'사용자 ID': [0], '리뷰 내용': [comment], '별점': [rating]})
-    print(total_p)
+    user = review.user
+    comment = review.comment
+    rating = review.rating
+
+    # search past reviews
+    past_reviews = db.query(models.Review).filter(models.Review.user == user).all()
+    if len(past_reviews) > 0:
+        total_p = pd.DataFrame({
+            '사용자 ID': [0 for _ in range(len(past_reviews) + 1)],
+            '리뷰 내용': [r.comment for r in past_reviews] + [comment],
+            '별점': [r.rating for r in past_reviews] + [rating]
+        })
+    else:
+        total_p = pd.DataFrame({'사용자 ID': [0], '리뷰 내용': [comment], '별점': [rating]})
 
     total_p['리뷰 길이'] = total_p['리뷰 내용'].apply(lambda x: len(x))
     total_p['POS'] = total_p['리뷰 내용'].apply(lambda x: twitter.pos(x))
@@ -70,8 +83,6 @@ def get_credibility_by_review(comment, rating):
     reviewer = reviewer.reset_index()
     reviewer = reviewer.drop(['사용자 ID'], axis=1)
 
-    print(reviewer)
-
     loaded_model = joblib.load('app/files/k_means.pkl')
     pred_new = loaded_model.predict(reviewer)
     reviewer['군집'] = pred_new
@@ -79,32 +90,32 @@ def get_credibility_by_review(comment, rating):
     for i in reviewer['군집']:
         if i == 3:
             x = 5
-        if i == 5:
+        elif i == 5:
             x = 3
-        if i == 4:
+        elif i == 4:
             x = 1
-        if i == 0:
+        elif i == 0:
             x = -1
-        if i == 2:
+        elif i == 2:
             x = -3
-        if i == 1:
+        else:
             x = -5
     for j in reviewer['별점_평균']:
-        if j == 1 or j == 5:
+        if j < 1.5 or j > 4.5:
             y = -5
-        if j == 2 or j == 4:
+        elif j < 2.5 or j > 3.5:
             y = 5
-        if j == 3:
+        else:
             y = 0
     reviewer['군집신뢰점수'] = x
     reviewer['degree점수'] = y
 
-    return 80 + reviewer.iloc[0, :]['degree점수'] + reviewer.iloc[0, :]['군집신뢰점수'] - reviewer.iloc[0, :]['N 비율_평균'] * 5 / 100 + reviewer.iloc[0, :]['V 비율_평균'] * 5 / 100
+    return reviewer.iloc[0, :]['군집'], 80 + reviewer.iloc[0, :]['degree점수'] + reviewer.iloc[0, :]['군집신뢰점수'] - reviewer.iloc[0, :]['N 비율_평균'] * 5 / 100 + reviewer.iloc[0, :]['V 비율_평균'] * 5 / 100
 
     # reviewer['조정 별점'] = reviewer['별점_평균'] * reviewer['신뢰도'] / 100
 
 
-def get_tag_by_user_reviews(reviews):
+def get_cluster_by_user_reviews(reviews):
     twitter = Twitter()
 
     total_p = pd.DataFrame({'사용자 ID': [0 for _ in range(len(reviews))], '리뷰 내용': [review.comment for review in reviews], '별점': [review.rating for review in reviews]})
@@ -144,19 +155,7 @@ def get_tag_by_user_reviews(reviews):
     reviewer = reviewer.drop(['사용자 ID'], axis=1)
 
     loaded_model = joblib.load('app/files/k_means.pkl')
-    cluster = loaded_model.predict(reviewer)[0]
 
-    if cluster == 0:
-        return '응애'
-    elif cluster == 1:
-        return '언어의 마술사'
-    elif cluster == 2:
-        return '긴 말은 안한다'
-    elif cluster == 3:
-        return '모든 램지'
-    elif cluster == 4:
-        return '박찬호'
-    else:
-        return '아낌없이 주는 사람'
+    return loaded_model.predict(reviewer)[0]
 
 
