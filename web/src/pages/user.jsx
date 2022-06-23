@@ -9,7 +9,7 @@ import {getRingByCredibility} from "../utils";
 const UserPage = () => {
     const {user} = useParams()
     const [reviewList, setReviewList] = useState([])
-    const [isTagLoading, setIsTagLoading] = useState(false)
+    const [tag, setTag] = useState('...')
 
     useEffect(() => {
         (async () => {
@@ -18,7 +18,6 @@ const UserPage = () => {
             const reviews = await response.json()
             setReviewList(reviews)
             // load tag
-            setIsTagLoading(true)
             response = await fetch(`${API_URL}/tag/user/${user}`)
             const tag = await response.json()
             console.log(tag)
@@ -28,6 +27,7 @@ const UserPage = () => {
     return <div>
         <Header back={true} />
         <h1 className="font-bold text-2xl text-gray-900">{user}님의 리뷰</h1>
+        <span>#{tag}</span>
         <div className="my-6 text-lg font-semibold">
             <span className="">전체</span>
             <span className="ml-2 text-indigo-800">{reviewList.length}</span>
