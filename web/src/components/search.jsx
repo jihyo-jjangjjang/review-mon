@@ -6,19 +6,17 @@ const Search = () => {
   const [list, setList] = useState([]);
   const OnChange = (searchText) => {
     //console.log(searchText);
-    /*
-    const searchList = (async () => {
-      const response = await fetch(`${API_URL}/review/user/${user}`);
-      console.log(response.json());
-    })();
-    */
-    if (searchText === "") {
+    if (searchText.replaceAll(" ", "") === "") {
       setList([]);
       return;
     }
-    const placeList = ["a", "abc", "dba"];
-    const searchList = placeList.filter((e) => e.indexOf(searchText) > -1);
-    setList(searchList);
+
+    var searchList = [];
+    (async () => {
+      const response = await fetch(`${API_URL}/place/${searchText}`);
+      const places = await response.json();
+      setList(places.map((place) => place["place"]));
+    })();
   };
   const OnClick = (searchText) => {
     document.location.href = "place/" + searchText;
