@@ -11,7 +11,7 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-locale.setlocale(locale.LC_TIME, 'ko_KR.UTF-8')
+locale.setlocale(locale.LC_ALL, 'ko_KR.UTF-8')
 
 origins = [
     "http://localhost",
