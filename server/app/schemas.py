@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from datetime import datetime
+from typing import Optional
 
 
 class ReviewBase(BaseModel):
@@ -17,7 +18,7 @@ class Review(ReviewBase):
     id: int
     credibility: float
     created_at: datetime
-    cluster: int
+    cluster: Optional[int]
 
     class Config:
         orm_mode = True
