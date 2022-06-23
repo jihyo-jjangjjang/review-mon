@@ -8,15 +8,15 @@ from .credibility import get_credibility_by_review
 
 
 def get_places_by_word(db: Session, word: str):
-    return db.query(models.Review).distinct(models.Review.place).group_by(models.Review.place).filter(models.Review.place.like(f'%{word}%')).limit(10).all()
+    return db.query(models.Review).distinct(models.Review.place).group_by(models.Review.place).filter(models.Review.place.like(f'%{word}%')).order_by(models.Review.place.asc()).limit(10).all()
 
 
 def get_reviews_by_place(db: Session, place: str):
-    return db.query(models.Review).filter(models.Review.place == place).all()
+    return db.query(models.Review).filter(models.Review.place == place).order_by(models.Review.created_at.desc()).all()
 
 
 def get_reviews_by_user(db: Session, user: str):
-    return db.query(models.Review).filter(models.Review.user == user).all()
+    return db.query(models.Review).filter(models.Review.user == user).order_by(models.Review.created_at.desc()).all()
 
 
 def create_review(db: Session, review: schemas.ReviewCreate):

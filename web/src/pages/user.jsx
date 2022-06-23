@@ -15,7 +15,6 @@ const UserPage = () => {
             const response = await fetch(`${API_URL}/review/user/${user}`)
             const reviews = await response.json()
             setReviewList(reviews)
-            console.log(reviews)
         })()
     }, [])
 
@@ -36,7 +35,7 @@ const UserPage = () => {
                     <span className="text-md">{comment}</span>
                     <div>
                         <Link to={`/place/${place}`} className="text-sm text-gray-400 hover:underline hover:text-gray-900">{place}</Link>
-                        <span className="text-sm text-gray-400"> | {new Date(created_at).toLocaleTimeString()} | 신고</span>
+                        <span className="text-sm text-gray-400"> | {new Date(created_at).toLocaleDateString()} | 신고</span>
                     </div>
                 </div>
             </div>)}
