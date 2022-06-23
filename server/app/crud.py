@@ -6,7 +6,7 @@ from .sentiment import predict_rating
 
 
 def get_places_by_word(db: Session, word: str):
-    return db.query(models.Review).distinct(models.Review.place).group_by(models.Review.place).filter(models.Review.place.like(f'%{word}%')).all()
+    return db.query(models.Review).distinct(models.Review.place).group_by(models.Review.place).filter(models.Review.place.like(f'%{word}%')).limit(10).all()
 
 
 def get_reviews_by_place(db: Session, place: str):
