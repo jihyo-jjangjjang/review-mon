@@ -23,7 +23,10 @@ const Search = () => {
   };
   return (
     <div>
-      <div className="rounded-lg border-blue-800 border-2 flex p-4">
+      <h1 className="font-bold text-2xl text-gray-900">
+        믿을만한 리뷰인지 궁금하다면
+      </h1>
+      <div className="mt-6 rounded-lg border-blue-800 border-2 flex p-4">
         <input
           placeholder="음식점 이름으로 검색"
           className="text-md w-full border-none border-0 bg-transparent focus:outline-none appearance-none"
