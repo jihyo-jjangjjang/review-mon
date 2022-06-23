@@ -28,6 +28,7 @@ def get_tag_by_user(db: Session, user: str):
 
 
 def create_review(db: Session, review: schemas.ReviewCreate):
+    print('received review', review, review.comment, review.rating)
     credibility = get_credibility_by_review(review.comment, review.rating)
     created_at = datetime.now()
     db_review = models.Review(user=review.user,
