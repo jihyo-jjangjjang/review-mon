@@ -3,7 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
 
-SQLALCHEMY_DATABASE_URL = f'mysql+mysqldb://root:password@{"database" if os.environ.get("PYTHON_ENV") == "docker" else "localhost"}:3306/test?charset=utf8'
+SQLALCHEMY_DATABASE_URL = f'mysql+mysqldb://root:password@ybigta-db.cp2uupxinzdw.ap-northeast-2.rds.amazonaws.com/db?charset=utf8'
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

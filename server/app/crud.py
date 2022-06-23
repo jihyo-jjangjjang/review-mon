@@ -5,6 +5,10 @@ from . import models, schemas
 from .sentiment import predict_rating
 
 
+def get_places_by_word(db: Session, word: str):
+    return db.query(models.Review).distinct(models.Review.place).group_by(models.Review.place).filter(models.Review.place.like(f'%{word}%')).all()
+
+
 def get_reviews_by_place(db: Session, place: str):
     return db.query(models.Review).filter(models.Review.place == place).all()
 

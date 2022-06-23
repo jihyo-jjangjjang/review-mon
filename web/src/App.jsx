@@ -6,7 +6,7 @@ import UserPage from "./pages/user";
 
 function App() {
   return (
-    <div className="App">
+    <div className="w-full p-6">
       <Routes>
         <Route exact path="/" element={<IndexPage />} />
         <Route path="/place/:place" element={<PlacePage />} />
