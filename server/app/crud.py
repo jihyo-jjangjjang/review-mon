@@ -24,7 +24,7 @@ def get_reviews_by_user(db: Session, user: str):
 def get_tag_by_user(db: Session, user: str):
     reviews = db.query(models.Review).filter(models.Review.user == user).all()
     if len(reviews) > 0:
-        if reviews[0].cluster is null:
+        if reviews[0].cluster is None:
             cluster = get_cluster_by_user_reviews(reviews)
             if cluster == 0:
                 tag = '응애'
