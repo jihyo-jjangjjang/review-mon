@@ -2,7 +2,15 @@ import { Link, useParams } from 'react-router-dom';
 import React, { useCallback, useEffect, useState } from 'react';
 import Rating from '../components/Rating';
 import Header from '../components/Header';
-import { UserCircleIcon } from '@heroicons/react/solid';
+import {
+  UserCircleIcon,
+  ChatAltIcon,
+  EmojiHappyIcon,
+  EmojiSadIcon,
+  FastForwardIcon,
+  QuestionMarkCircleIcon,
+  HandIcon,
+} from '@heroicons/react/solid';
 import { getRingByCredibility } from '../utils';
 import { API_URL } from '../constants';
 import ReactLoading from 'react-loading';
@@ -224,11 +232,48 @@ const PlacePage = () => {
                   return (
                     <div key={idx} className='w-full p-2 flex'>
                       <div className='w-10 mt-2'>
-                        <UserCircleIcon
-                          className={`w-10 h-10 text-gray-400 bg-transparent ring-4 ${getRingByCredibility(
-                            credibility
-                          )} rounded-full`}
-                        />
+                        {tag === '응애' && (
+                          <HandIcon
+                            className={`w-10 h-10 text-gray-400 bg-transparent ring-4 ${getRingByCredibility(
+                              credibility
+                            )} rounded-full`}
+                          />
+                        )}
+                        {tag === '언어의 마술사' && (
+                          <QuestionMarkCircleIcon
+                            className={`w-10 h-10 text-gray-400 bg-transparent ring-4 ${getRingByCredibility(
+                              credibility
+                            )} rounded-full`}
+                          />
+                        )}
+                        {tag === '긴 말은 안한다' && (
+                          <FastForwardIcon
+                            className={`w-10 h-10 text-gray-400 bg-transparent ring-4 ${getRingByCredibility(
+                              credibility
+                            )} rounded-full`}
+                          />
+                        )}
+                        {tag === '모든 램지' && (
+                          <EmojiSadIcon
+                            className={`w-10 h-10 text-gray-400 bg-transparent ring-4 ${getRingByCredibility(
+                              credibility
+                            )} rounded-full`}
+                          />
+                        )}
+                        {tag === '박찬호' && (
+                          <ChatAltIcon
+                            className={`w-10 h-10 text-gray-400 bg-transparent ring-4 ${getRingByCredibility(
+                              credibility
+                            )} rounded-full`}
+                          />
+                        )}
+                        {tag === '아낌없이 주는 사람' && (
+                          <EmojiHappyIcon
+                            className={`w-10 h-10 text-gray-400 bg-transparent ring-4 ${getRingByCredibility(
+                              credibility
+                            )} rounded-full`}
+                          />
+                        )}
                       </div>
                       <div className='ml-4 flex flex-col gap-1'>
                         <Rating rating={rating} />
