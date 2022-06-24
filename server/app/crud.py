@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from datetime import datetime
 import pytz
+from fastapi import HTTPException
 
 from . import models, schemas
 
@@ -48,6 +49,13 @@ def get_tag_by_user(db: Session, user: str):
 def create_review(db: Session, review: schemas.ReviewCreate):
     cluster, credibility = get_cluster_and_credibility_by_review(db, review)
 
+    if credibility < 80:
+        raise HTTPException(status_code=400, detail={
+            'message': '신뢰도가 낮습니다.',
+            'cluster': str(cluster),
+            'credibility': str(credibility)
+        })
+
     created_at = datetime.now(tz=pytz.timezone('Asia/Seoul'))
     db_review = models.Review(user=review.user,
                               place=review.place,
@@ -58,6 +66,22 @@ def create_review(db: Session, review: schemas.ReviewCreate):
                               cluster=cluster)
     db.add(db_review)
     db.query(models.Review).filter(models.Review.user == review.user).update({'cluster': cluster})
+    db.commit()
+    db.refresh(db_review)
+    return db_review
+
+
+def create_review_direct(db: Session, review: schemas.ReviewCreate):
+    created_at = datetime.now(tz=pytz.timezone('Asia/Seoul'))
+    db_review = models.Review(user=review.user,
+                              place=review.place,
+                              comment=review.comment,
+                              rating=review.rating,
+                              credibility=review.credibility,
+                              created_at=created_at,
+                              cluster=review.cluster)
+    db.add(db_review)
+    db.query(models.Review).filter(models.Review.user == review.user).update({'cluster': review.cluster})
     db.commit()
     db.refresh(db_review)
     return db_review

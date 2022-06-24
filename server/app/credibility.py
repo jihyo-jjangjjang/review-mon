@@ -5,8 +5,6 @@ import joblib
 from . import models
 from .sentiment import predict_pn
 
-means =
-
 
 def degree_cal(rate):
     if rate == 1 or rate == 5:
@@ -102,7 +100,7 @@ def get_cluster_and_credibility_by_review(db, review):
         x = -5
 
     rating_avg = reviewer.iloc[0, :]['별점_평균']
-    if rating_avg < 1.5 or rating_avg > 4.5:
+    if rating_avg < 2 or rating_avg > 4:
         y = -5
     elif rating_avg < 2.5 or rating_avg > 3.5:
         y = 5

@@ -11,7 +11,19 @@ class ReviewBase(BaseModel):
 
 
 class ReviewCreate(ReviewBase):
+    cluster: Optional[int]
+    credibility: Optional[float]
     pass
+
+
+class ReviewCreateErrorDetail(BaseModel):
+    message: str
+    cluster: int
+    credibility: float
+
+
+class ReviewCreateError(BaseModel):
+    detail: ReviewCreateErrorDetail
 
 
 class Review(ReviewBase):

@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
@@ -37,11 +37,6 @@ def get_places_by_word(word: str, db: Session = Depends(get_db)):
     return crud.get_places_by_word(db=db, word=word)
 
 
-@app.post("/review", response_model=schemas.Review)
-def create_review(review: schemas.ReviewCreate, db: Session = Depends(get_db)):
-    return crud.create_review(db=db, review=review)
-
-
 @app.get("/review/place/{place}", response_model=List[schemas.Review])
 def get_reviews_by_place(place: str, db: Session = Depends(get_db)):
     return crud.get_reviews_by_place(db=db, place=place)
@@ -55,3 +50,13 @@ def get_reviews_by_user(user: str, db: Session = Depends(get_db)):
 @app.get('/tag/user/{user}', response_model=str)
 def get_tag_by_user(user: str, db: Session = Depends(get_db)):
     return crud.get_tag_by_user(db=db, user=user)
+
+
+@app.post("/review", response_model=Union[schemas.Review, schemas.ReviewCreateError])
+def create_review(review: schemas.ReviewCreate, db: Session = Depends(get_db)):
+    return crud.create_review(db=db, review=review)
+
+
+@app.post("/review/direct", response_model=schemas.Review)
+def create_review_direct(review: schemas.ReviewCreate, db: Session = Depends(get_db)):
+    return crud.create_review_direct(db=db, review=review)
