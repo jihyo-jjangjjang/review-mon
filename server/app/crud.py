@@ -24,9 +24,21 @@ def get_reviews_by_user(db: Session, user: str):
 def get_tag_by_user(db: Session, user: str):
     reviews = db.query(models.Review).filter(models.Review.user == user).all()
     if len(reviews) > 0:
-        if not reviews[0].cluster:
+        if reviews[0].cluster is null:
             cluster = get_cluster_by_user_reviews(reviews)
-            db.query(models.Review).filter(models.Review.user == user).update({'cluster': cluster})
+            if cluster == 0:
+                tag = '응애'
+            elif cluster == 1:
+                tag = '언어의 마술사'
+            elif cluster == 2:
+                tag = '긴 말은 안한다'
+            elif cluster == 3:
+                tag = '모든 램지'
+            elif cluster == 4:
+                tag = '박찬호'
+            else:
+                tag = '아낌없이 주는 사람'
+            db.query(models.Review).filter(models.Review.user == user).update({'cluster': cluster, 'tag': tag})
             db.commit()
         else:
             cluster = reviews[0].cluster
