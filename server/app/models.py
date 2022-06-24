@@ -13,3 +13,4 @@ class Review(Base):
     credibility = Column(Float)
     created_at = Column(DateTime)
     cluster = Column(Integer, nullable=True)
+    tag = Column(String(100), nullable=True)

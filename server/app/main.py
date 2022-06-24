@@ -60,3 +60,27 @@ def create_review(review: schemas.ReviewCreate, db: Session = Depends(get_db)):
 @app.post("/review/direct", response_model=schemas.Review)
 def create_review_direct(review: schemas.ReviewCreate, db: Session = Depends(get_db)):
     return crud.create_review_direct(db=db, review=review)
+
+
+@app.get('/update-cluster')
+def update_cluster(db: Session = Depends(get_db)):
+    import pandas as pd
+    df = pd.read_csv('app/files/닉네임 붙인거.csv')
+    df = df[['사용자 닉네임', 'k_means_cluster']]
+    for idx, row in df.iterrows():
+        print(idx)
+        cluster = row['k_means_cluster']
+        if cluster == 0:
+            tag = '응애'
+        elif cluster == 1:
+            tag = '언어의 마술사'
+        elif cluster == 2:
+            tag = '긴 말은 안한다'
+        elif cluster == 3:
+            tag = '모든 램지'
+        elif cluster == 4:
+            tag = '박찬호'
+        else:
+            tag = '아낌없이 주는 사람'
+        db.query(models.Review).filter(models.Review.user == row['사용자 닉네임']).update({'cluster': cluster, 'tag': tag})
+    db.commit()

@@ -48,6 +48,18 @@ def get_tag_by_user(db: Session, user: str):
 
 def create_review(db: Session, review: schemas.ReviewCreate):
     cluster, credibility = get_cluster_and_credibility_by_review(db, review)
+    if cluster == 0:
+        tag = '응애'
+    elif cluster == 1:
+        tag = '언어의 마술사'
+    elif cluster == 2:
+        tag = '긴 말은 안한다'
+    elif cluster == 3:
+        tag = '모든 램지'
+    elif cluster == 4:
+        tag = '박찬호'
+    else:
+        tag = '아낌없이 주는 사람'
 
     if credibility < 80:
         raise HTTPException(status_code=400, detail={
@@ -63,7 +75,8 @@ def create_review(db: Session, review: schemas.ReviewCreate):
                               rating=review.rating,
                               credibility=credibility,
                               created_at=created_at,
-                              cluster=cluster)
+                              cluster=cluster,
+                              tag=tag)
     db.add(db_review)
     db.query(models.Review).filter(models.Review.user == review.user).update({'cluster': cluster})
     db.commit()
@@ -73,13 +86,27 @@ def create_review(db: Session, review: schemas.ReviewCreate):
 
 def create_review_direct(db: Session, review: schemas.ReviewCreate):
     created_at = datetime.now(tz=pytz.timezone('Asia/Seoul'))
+    cluster = review.cluster
+    if cluster == 0:
+        tag = '응애'
+    elif cluster == 1:
+        tag = '언어의 마술사'
+    elif cluster == 2:
+        tag = '긴 말은 안한다'
+    elif cluster == 3:
+        tag = '모든 램지'
+    elif cluster == 4:
+        tag = '박찬호'
+    else:
+        tag = '아낌없이 주는 사람'
     db_review = models.Review(user=review.user,
                               place=review.place,
                               comment=review.comment,
                               rating=review.rating,
                               credibility=review.credibility,
                               created_at=created_at,
-                              cluster=review.cluster)
+                              cluster=cluster,
+                              tag=tag)
     db.add(db_review)
     db.query(models.Review).filter(models.Review.user == review.user).update({'cluster': review.cluster})
     db.commit()

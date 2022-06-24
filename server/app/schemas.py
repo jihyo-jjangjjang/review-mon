@@ -31,6 +31,7 @@ class Review(ReviewBase):
     credibility: float
     created_at: datetime
     cluster: Optional[int]
+    tag: Optional[str]
 
     class Config:
         orm_mode = True
