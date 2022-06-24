@@ -33,6 +33,34 @@ def NV_count(each_result):
 
 def get_cluster_and_credibility_by_review(db, review):
     twitter = Twitter()
+    means = pd.DataFrame({
+        '별점_평균': [3.6221],
+        '별점_표준편차': [1.0520],
+        '리뷰 개수': [8.4382],
+        '리뷰 길이_평균': [61.0339],
+        '리뷰 길이_표준편차': [34.4043],
+        'degree_평균': [2.7113],
+        '긍정 리뷰 개수': [5.4653],
+        '긍부정 예측 일치 비율': [91.8587],
+        'N 비율_평균': [41.5198],
+        'N 비율_표준편차': [11.5032],
+        'V 비율_평균': [13.2754],
+        'V 비율_표준편차': [8.6737]
+    })
+    stds = pd.DataFrame({
+        '별점_평균': [1.1935],
+        '별점_표준편차': [0.8058],
+        '리뷰 개수': [5.3840],
+        '리뷰 길이_평균': [39.6636],
+        '리뷰 길이_표준편차': [25.4387],
+        'degree_평균': [0.3585],
+        '긍정 리뷰 개수': [4.3945],
+        '긍부정 예측 일치 비율': [14.5478],
+        'N 비율_평균': [10.0669],
+        'N 비율_표준편차': [8.4345],
+        'V 비율_평균': [6.9313],
+        'V 비율_표준편차': [6.0743]
+    })
 
     user = review.user
     comment = review.comment
@@ -82,6 +110,7 @@ def get_cluster_and_credibility_by_review(db, review):
     reviewer['긍부정 예측 일치 비율'] = reviewer['긍부정 예측 일치 비율'] / reviewer['리뷰 개수'] * 100
     reviewer = reviewer.reset_index()
     reviewer = reviewer.drop(['사용자 ID'], axis=1)
+    reviewer = (reviewer - means) / stds
 
     loaded_model = joblib.load('app/files/k_means.pkl')
     cluster = loaded_model.predict(reviewer)[0]
@@ -116,6 +145,34 @@ def get_cluster_and_credibility_by_review(db, review):
 
 def get_cluster_by_user_reviews(reviews):
     twitter = Twitter()
+    means = pd.DataFrame({
+        '별점_평균': [3.6221],
+        '별점_표준편차': [1.0520],
+        '리뷰 개수': [8.4382],
+        '리뷰 길이_평균': [61.0339],
+        '리뷰 길이_표준편차': [34.4043],
+        'degree_평균': [2.7113],
+        '긍정 리뷰 개수': [5.4653],
+        '긍부정 예측 일치 비율': [91.8587],
+        'N 비율_평균': [41.5198],
+        'N 비율_표준편차': [11.5032],
+        'V 비율_평균': [13.2754],
+        'V 비율_표준편차': [8.6737]
+    })
+    stds = pd.DataFrame({
+        '별점_평균': [1.1935],
+        '별점_표준편차': [0.8058],
+        '리뷰 개수': [5.3840],
+        '리뷰 길이_평균': [39.6636],
+        '리뷰 길이_표준편차': [25.4387],
+        'degree_평균': [0.3585],
+        '긍정 리뷰 개수': [4.3945],
+        '긍부정 예측 일치 비율': [14.5478],
+        'N 비율_평균': [10.0669],
+        'N 비율_표준편차': [8.4345],
+        'V 비율_평균': [6.9313],
+        'V 비율_표준편차': [6.0743]
+    })
 
     total_p = pd.DataFrame({'사용자 ID': [0 for _ in range(len(reviews))], '리뷰 내용': [review.comment for review in reviews], '별점': [review.rating for review in reviews]})
 
@@ -152,6 +209,7 @@ def get_cluster_by_user_reviews(reviews):
     reviewer['긍부정 예측 일치 비율'] = reviewer['긍부정 예측 일치 비율'] / reviewer['리뷰 개수'] * 100
     reviewer = reviewer.reset_index()
     reviewer = reviewer.drop(['사용자 ID'], axis=1)
+    reviewer = (reviewer - means) / stds
 
     loaded_model = joblib.load('app/files/k_means.pkl')
 

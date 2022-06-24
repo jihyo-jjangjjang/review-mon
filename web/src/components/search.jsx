@@ -25,7 +25,7 @@ const Search = ({setIsSearching}) => {
       <h1 className="font-semibold text-2xl text-gray-900">
         믿을만한 리뷰인지 궁금하다면
       </h1>
-      <div className="mt-4 rounded-lg border-indigo-800 border-2 flex px-4 py-2">
+      <div className="mt-4 rounded-lg border-indigo-800 border-2 flex px-4 py-2 shadow-md">
         <input
           placeholder="음식점 이름으로 검색"
           className="font-medium text-lg w-full border-none border-0 bg-transparent focus:outline-none appearance-none"

@@ -74,7 +74,7 @@ const PlacePage = () => {
           </div>
         )}
         {!isLoading && (
-          <div className="rounded-lg border-indigo-800 border-2 flex flex-col justify-center content-center">
+          <div className="rounded-lg border-indigo-800 border-2 flex flex-col justify-center content-center shadow-md">
             <div className="flex border-b-2 p-2 place-items-center">
               <Rating setter={setter} userRating={userRating} />
               <span className="ml-4 font-semibold">{userRating} / 5 점</span>
