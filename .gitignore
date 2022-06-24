@@ -2,3 +2,4 @@ server/.cache
 server/app/__pycache__
 web/node_modules
 .idea
+server/app/files

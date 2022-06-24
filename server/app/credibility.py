@@ -5,6 +5,8 @@ import joblib
 from . import models
 from .sentiment import predict_pn
 
+means =
+
 
 def degree_cal(rate):
     if rate == 1 or rate == 5:
@@ -84,33 +86,32 @@ def get_cluster_and_credibility_by_review(db, review):
     reviewer = reviewer.drop(['사용자 ID'], axis=1)
 
     loaded_model = joblib.load('app/files/k_means.pkl')
-    pred_new = loaded_model.predict(reviewer)
-    reviewer['군집'] = pred_new
+    cluster = loaded_model.predict(reviewer)[0]
 
-    for i in reviewer['군집']:
-        if i == 3:
-            x = 5
-        elif i == 5:
-            x = 3
-        elif i == 4:
-            x = 1
-        elif i == 0:
-            x = -1
-        elif i == 2:
-            x = -3
-        else:
-            x = -5
-    for j in reviewer['별점_평균']:
-        if j < 1.5 or j > 4.5:
-            y = -5
-        elif j < 2.5 or j > 3.5:
-            y = 5
-        else:
-            y = 0
+    if cluster == 3:
+        x = 5
+    elif cluster == 5:
+        x = 3
+    elif cluster == 4:
+        x = 1
+    elif cluster == 0:
+        x = -1
+    elif cluster == 2:
+        x = -3
+    else:
+        x = -5
+
+    rating_avg = reviewer.iloc[0, :]['별점_평균']
+    if rating_avg < 1.5 or rating_avg > 4.5:
+        y = -5
+    elif rating_avg < 2.5 or rating_avg > 3.5:
+        y = 5
+    else:
+        y = 0
     reviewer['군집신뢰점수'] = x
     reviewer['degree점수'] = y
 
-    return reviewer.iloc[0, :]['군집'], 80 + reviewer.iloc[0, :]['degree점수'] + reviewer.iloc[0, :]['군집신뢰점수'] - reviewer.iloc[0, :]['N 비율_평균'] * 5 / 100 + reviewer.iloc[0, :]['V 비율_평균'] * 5 / 100
+    return cluster, 80 + reviewer.iloc[0, :]['degree점수'] + reviewer.iloc[0, :]['군집신뢰점수'] - reviewer.iloc[0, :]['N 비율_평균'] * 5 / 100 + reviewer.iloc[0, :]['V 비율_평균'] * 5 / 100
 
     # reviewer['조정 별점'] = reviewer['별점_평균'] * reviewer['신뢰도'] / 100
 
