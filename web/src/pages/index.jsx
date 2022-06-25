@@ -16,7 +16,7 @@ const IndexPage = () => {
           </span>
           <div className="mt-4 flex flex-col gap-4">
             <a
-              href="https://www.google.com/maps/search/%EC%8B%A0%EC%B4%8C+%EB%A7%9B%EC%A7%91/data=!3m1!4b1"
+              href="https://m.map.kakao.com/actions/searchView?q=%EC%8B%A0%EC%B4%8C%20%EC%9D%8C%EC%8B%9D%EC%A0%90&wxEnc=LVSOTP&wyEnc=QNLTTMN&lvl=4#!/all/map/place"
               className="relative shadow-md"
             >
               <img className="" alt="picture" src="mapo.png" />
@@ -28,7 +28,7 @@ const IndexPage = () => {
               </div>
             </a>
             <a
-              href="https://www.google.com/maps/search/%ED%99%8D%EB%8C%80%EB%A7%9B%EC%A7%91/data=!3m1!4b1"
+              href="https://m.map.kakao.com/actions/searchView?q=%ED%99%8D%EB%8C%80%20%EC%9D%8C%EC%8B%9D%EC%A0%90&wxEnc=LWSSTP&wyEnc=QNLRRUN&lvl=4#!/all/map/place"
               className="relative shadow-md"
             >
               <img className="" alt="picture" src="daepo.png" />
