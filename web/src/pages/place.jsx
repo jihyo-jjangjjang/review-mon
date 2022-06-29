@@ -60,6 +60,7 @@ const PlacePage = () => {
         setter(0);
         setReviewContent("");
         setUserID("");
+        await updateReviews();
       } catch (e) {
         alert("서버 오류입니다.");
       }
